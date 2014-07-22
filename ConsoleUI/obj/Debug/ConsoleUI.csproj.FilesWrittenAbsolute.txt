@@ -1,0 +1,5 @@
+/Users/mike/Desktop/ConsoleUI/ConsoleUI/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/Users/mike/Desktop/ConsoleUI/ConsoleUI/bin/Debug/ConsoleUI.dll.mdb
+/Users/mike/Desktop/ConsoleUI/ConsoleUI/bin/Debug/ConsoleUI.dll
+/Users/mike/Desktop/ConsoleUI/ConsoleUI/obj/Debug/ConsoleUI.dll
+/Users/mike/Desktop/ConsoleUI/ConsoleUI/obj/Debug/ConsoleUI.dll.mdb
