@@ -9,11 +9,11 @@ namespace ConsoleUITester
 		public static void Main (string[] args)
 		{
 			var w = new Writer ();
-			w.SetArea (5, 5, 30, 10);
+			w.SetArea (10, 5, 30, 10);
 
 			w.LineStyle2 = LineStyle.Thick;
 			w.DrawBorder ();
-//			w.LineStyle2 = LineStyle.Normal;
+			w.LineStyle2 = LineStyle.Normal;
 			w.DrawBorder ();
 
 			w.Text (Position.Zero, "hello");

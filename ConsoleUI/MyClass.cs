@@ -97,11 +97,11 @@ namespace ConsoleUI
 			int oldLeft = Console.CursorLeft;
 			int oldTop = Console.CursorTop;
 
-			if (localPos.x > width || localPos.y > height) {
+			if (localPos.x >= width || localPos.y >= height) {
 				return;
 			}
 			var windowPos = LocalToWindowPosition (localPos);
-			if (windowPos.x > Console.BufferWidth || windowPos.y > Console.BufferHeight) {
+			if (windowPos.x >= Console.BufferWidth || windowPos.y >= Console.BufferHeight) {
 				return;
 			}
 			if (justification == Justification.Center) {
@@ -124,11 +124,11 @@ namespace ConsoleUI
 			int origLeft = Console.CursorLeft;
 			int origTop = Console.CursorTop;
 
-			if (localPos.x > width || localPos.y > height) {
+			if (localPos.x >= width || localPos.y >= height) {
 				return;
 			}
 			var windowPos = LocalToWindowPosition (localPos);
-			if (windowPos.x > Console.BufferWidth || windowPos.y > Console.BufferHeight) {
+			if (windowPos.x >= Console.BufferWidth || windowPos.y >= Console.BufferHeight) {
 				return;
 			}
 			Console.SetCursorPosition (windowPos.x, windowPos.y);
