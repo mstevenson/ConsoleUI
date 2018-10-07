@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace ConsoleUI
+﻿namespace ConsoleUI
 {
-	public enum LineStyle
-	{
-		Normal,
-		Thick,
-		Double,
-	}
+    public enum LineStyle
+    {
+        Normal,
+        Thick,
+        Double
+    }
 }
 

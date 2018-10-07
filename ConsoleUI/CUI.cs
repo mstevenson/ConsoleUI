@@ -3,96 +3,92 @@ using System.Collections.Generic;
 
 namespace ConsoleUI
 {
-	public static class CUI
-	{
-		static Area area;
-		static BorderChars borderChars;
-		static int cachedWindowPosX;
-		static int cachedWindowPosY;
-		static Justification justification = Justification.Left;
+    public static class CUI
+    {
+        private static Area _area;
+        private static BorderChars _borderChars;
+        private static int _cachedWindowPosX;
+        private static int _cachedWindowPosY;
+        private static Justification _justification = Justification.Left;
 
-		static CUI ()
-		{
-			Console.Clear();
-			Console.SetCursorPosition (0, Console.WindowHeight - 1);
-			SetAreaFullScreen ();
-			LineStyle = LineStyle.Normal;
-		}
+        static CUI ()
+        {
+            Console.Clear();
+            Console.SetCursorPosition (0, Console.WindowHeight - 1);
+            SetAreaFullScreen ();
+            LineStyle = LineStyle.Normal;
+        }
 
-		static public LineStyle LineStyle
-		{
-			get {
-				return _lineStyle;
-			}
-			set {
-				_lineStyle = value;
-				switch (_lineStyle) {
-				case LineStyle.Thick:
-					borderChars = new BorderChars ('━', '━', '┃', '┃', '┏', '┓', '┗', '┛', '┳', '┻', '┣', '┫', '╋', '━', '┃');
-					break;
-				case LineStyle.Double:
-					borderChars = new BorderChars ('═', '═', '║', '║', '╔', '╗', '╚', '╝', '╦', '╩', '╠', '╣', '╬', '═', '║');
-					break;
-				case LineStyle.Normal:
-				default:
-					borderChars = new BorderChars ('─', '─', '│', '│', '┌', '┐', '└', '┘', '┬', '┴', '├', '┤', '┼', '─', '│');
-					break;
-				}
-			}
-		}
-		static LineStyle _lineStyle;
+        private static LineStyle _lineStyle;
+        public static LineStyle LineStyle
+        {
+            get {
+                return _lineStyle;
+            }
+            set {
+                _lineStyle = value;
+                switch (_lineStyle) {
+                case LineStyle.Thick:
+                    _borderChars = new BorderChars ('━', '━', '┃', '┃', '┏', '┓', '┗', '┛', '┳', '┻', '┣', '┫', '╋', '━', '┃');
+                    break;
+                case LineStyle.Double:
+                    _borderChars = new BorderChars ('═', '═', '║', '║', '╔', '╗', '╚', '╝', '╦', '╩', '╠', '╣', '╬', '═', '║');
+                    break;
+                case LineStyle.Normal:
+                default:
+                    _borderChars = new BorderChars ('─', '─', '│', '│', '┌', '┐', '└', '┘', '┬', '┴', '├', '┤', '┼', '─', '│');
+                    break;
+                }
+            }
+        }
+        
+        private static Position CursorPosition {
+            get => _area.CursorPosition;
+            set => _area.CursorPosition = value;
+        }
 
-		static public Position CursorPosition {
-			get {
-				return area.cursorPosition;
-			}
-			set {
-				area.cursorPosition = value;
-			}
-		}
+        public static void MoveCursorUp(int distance = 1)
+        {
+            CursorPosition = CursorPosition.GetUp(distance);
+        }
 
-		static public void MoveCursorUp (int distance = 1)
-		{
-			CursorPosition = CursorPosition.GetUp (distance);
-		}
+        public static void MoveCursorDown(int distance = 1)
+        {
+            CursorPosition = CursorPosition.GetDown(distance);
+        }
 
-		static public void MoveCursorDown (int distance = 1)
-		{
-			CursorPosition = CursorPosition.GetDown (distance);
-		}
+        public static void MoveCursorLeft(int distance = 1)
+        {
+            CursorPosition = CursorPosition.GetLeft(distance);
+        }
 
-		static public void MoveCursorLeft (int distance = 1)
-		{
-			CursorPosition = CursorPosition.GetLeft (distance);
-		}
+        public static void MoveCursorRight(int distance = 1)
+        {
+            CursorPosition = CursorPosition.GetRight(distance);
+        }
 
-		static public void MoveCursorRight (int distance = 1)
-		{
-			CursorPosition = CursorPosition.GetRight (distance);
-		}
+        public static void SetArea(int x, int y, int width, int height)
+        {
+            _area = new Area(new Position(x, y), width, height);
+        }
 
-		static public void SetArea (int x, int y, int width, int height)
-		{
-			area = new Area (new Position (x, y), width, height);
-		}
+        public static void ScaleArea(int x, int y)
+        {
+            _area.Width = Math.Max(_area.Width + x, 3);
+            _area.Height = Math.Max(_area.Height + y, 3);
+        }
 
-		static public void ScaleArea (int x, int y)
-		{
-			area.width = Math.Max (area.width + x, 3);
-			area.height = Math.Max (area.height + y, 3);
-		}
+        public static void ScaleAreaCentered(int x, int y)
+        {
+            ScaleArea(2 * x, 2 * y);
+            MoveArea(-1 * x, -1 * y);
+        }
 
-		static public void ScaleAreaCentered (int x, int y)
-		{
-			ScaleArea (2 * x, 2 * y);
-			MoveArea (-1 * x, -1 * y);
-		}
-
-		static public void MoveArea (int x, int y)
-		{
-			area.windowPosition.x += x;
-			area.windowPosition.y += y;
-		}
+        public static void MoveArea(int x, int y)
+        {
+            _area.WindowPosition.X += x;
+            _area.WindowPosition.Y += y;
+        }
 
 //		static public void MoveAreaInWindowBounds (float percentX, float percentY)
 //		{
@@ -109,171 +105,188 @@ namespace ConsoleUI
 //			return y0 + (x - x0) * (y1 - y0) / (x1 - x0);
 //		}
 
-		static public void SetAreaFullScreen ()
-		{
-			area = new Area (Position.Zero, Console.WindowWidth, Console.WindowHeight);
-		}
+        public static void SetAreaFullScreen()
+        {
+            _area = new Area(Position.Zero, Console.WindowWidth, Console.WindowHeight);
+        }
 
-		static void CacheWindowCursorPos ()
-		{
-			cachedWindowPosX = Console.CursorLeft;
-			cachedWindowPosY = Console.CursorTop;
-		}
+        private static void CacheWindowCursorPos()
+        {
+            _cachedWindowPosX = Console.CursorLeft;
+            _cachedWindowPosY = Console.CursorTop;
+        }
 
-		static void RestoreWindowCursorPos ()
-		{
-			Console.SetCursorPosition (cachedWindowPosX, cachedWindowPosY);
-		}
+        private static void RestoreWindowCursorPos()
+        {
+            Console.SetCursorPosition(_cachedWindowPosX, _cachedWindowPosY);
+        }
 
-		static public void SetJustification (Justification j)
-		{
-			justification = j;
-		}
+        public static void SetJustification(Justification j)
+        {
+            _justification = j;
+        }
 
-		static public void DrawString (string s)
-		{
-			DrawString (CursorPosition, s);
-		}
+        public static void DrawString(string s)
+        {
+            DrawString(CursorPosition, s);
+        }
 
-		static public void DrawString (int x, int y, string s)
-		{
-			DrawString (new Position (x, y), s);
-		}
+        public static void DrawString(int x, int y, string s)
+        {
+            DrawString(new Position(x, y), s);
+        }
 
-		static public void DrawString (Position localPos, string s)
-		{
-			CacheWindowCursorPos ();
-			CursorPosition = localPos;
+        public static void DrawString(Position localPos, string s)
+        {
+            CacheWindowCursorPos();
+            CursorPosition = localPos;
 
-			if (localPos.x >= area.width || localPos.y >= area.height || localPos.x < 0 || localPos.y < 0) {
-				return;
-			}
-			var windowPos = AreaToWindowPosition (localPos);
-			if (windowPos.x >= Console.BufferWidth || windowPos.y >= Console.BufferHeight || windowPos.x < 0 || windowPos.y < 0) {
-				return;
-			}
-			if (justification == Justification.Center) {
-				s = new string(' ', area.width / 2 - s.Length / 2) + s;
-			}
+            if (localPos.X >= _area.Width || localPos.Y >= _area.Height || localPos.X < 0 || localPos.Y < 0)
+            {
+                return;
+            }
 
-			// Truncate strings that overflow the area
+            var windowPos = AreaToWindowPosition(localPos);
+            if (windowPos.X >= Console.BufferWidth || windowPos.Y >= Console.BufferHeight || windowPos.X < 0 ||
+                windowPos.Y < 0)
+            {
+                return;
+            }
+
+            if (_justification == Justification.Center)
+            {
+                s = new string(' ', _area.Width / 2 - s.Length / 2) + s;
+            }
+
+            // Truncate strings that overflow the area
 //			int maxWidth = WindowClippedPositionInArea - localPos.x;
 //			if (maxWidth > 0) {
 //				s = s.Length <= maxWidth ? s : s.Substring (0, maxWidth);
-				// Write text
-				Console.SetCursorPosition (windowPos.x, windowPos.y);
-				Console.Write (s);
+            // Write text
+            Console.SetCursorPosition(windowPos.X, windowPos.Y);
+            Console.Write(s);
 //			}
 
-			RestoreWindowCursorPos ();
-		}
+            RestoreWindowCursorPos();
+        }
 
-		static public void DrawCharacter (char c)
-		{
-			DrawCharacter (CursorPosition, c);
-		}
+        public static void DrawCharacter(char c)
+        {
+            DrawCharacter(CursorPosition, c);
+        }
 
-		static public void DrawCharacter (int x, int y, char c)
-		{
-			DrawCharacter (new Position (x, y), c);
-		}
+        public static void DrawCharacter(int x, int y, char c)
+        {
+            DrawCharacter(new Position(x, y), c);
+        }
 
-		static public void DrawCharacter (Position localPos, char c)
-		{
-			CacheWindowCursorPos ();
-			CursorPosition = localPos;
+        public static void DrawCharacter(Position localPos, char c)
+        {
+            CacheWindowCursorPos();
+            CursorPosition = localPos;
 
-			if (localPos.x >= area.width || localPos.y >= area.height) {
-				return;
-			}
-			var windowPos = AreaToWindowPosition (localPos);
-			if (windowPos.x >= Console.BufferWidth || windowPos.y >= Console.BufferHeight) {
-				return;
-			}
-			Console.SetCursorPosition (windowPos.x, windowPos.y);
-			Console.Write (c);
+            if (localPos.X >= _area.Width || localPos.Y >= _area.Height)
+            {
+                return;
+            }
 
-			RestoreWindowCursorPos ();
-		}
+            var windowPos = AreaToWindowPosition(localPos);
+            if (windowPos.X >= Console.BufferWidth || windowPos.Y >= Console.BufferHeight)
+            {
+                return;
+            }
 
-		static public void DrawList (IList<string> contents)
-		{
-			foreach (var s in contents)
-			{
-				DrawString (CursorPosition, s);
-				MoveCursorDown ();
-			}
-		}
+            Console.SetCursorPosition(windowPos.X, windowPos.Y);
+            Console.Write(c);
 
-		static public void DrawHorizontalDivider ()
-		{
-			DrawHorizontalDivider (CursorPosition.y);
-		}
+            RestoreWindowCursorPos();
+        }
 
-		static public void DrawHorizontalDivider (int yPos)
-		{
-			DrawString (new Position (0, yPos), new string (borderChars.horizontal, area.width));
-		}
+        public static void DrawList(IList<string> contents)
+        {
+            foreach (var s in contents)
+            {
+                DrawString(CursorPosition, s);
+                MoveCursorDown();
+            }
+        }
 
-		static public void DrawVerticalDivider ()
-		{
-			DrawVerticalDivider (CursorPosition.x);
-		}
+        public static void DrawHorizontalDivider()
+        {
+            DrawHorizontalDivider(CursorPosition.Y);
+        }
 
-		static public void DrawVerticalDivider (int xPos)
-		{
-			var c = borderChars.left;
-			for (int y = 0; y < area.height; y++) {
-				DrawString (new Position (xPos, y), c.ToString ());
-			}
-		}
+        public static void DrawHorizontalDivider(int yPos)
+        {
+            DrawString(new Position(0, yPos), new string(_borderChars.Horizontal, _area.Width));
+        }
 
-		/// <summary>
-		/// Border drawing contracts the current area so that borders will not be overwritten by subsequent draw calls.
-		/// </summary>
-		static public void DrawAreaBorder ()
-		{
-			var cachedAreaPos = CursorPosition;
+        public static void DrawVerticalDivider()
+        {
+            DrawVerticalDivider(CursorPosition.X);
+        }
 
-			// Horizontal
-			for (int x = 1; x < area.width - 1; x++) {
-				DrawCharacter (x, 0, borderChars.top);
-				DrawCharacter (x, area.height - 1, borderChars.bottom);
-			}
-			// Vertical
-			for (int y = 1; y < area.height - 1; y++) {
-				DrawCharacter (0, y, borderChars.left);
-				DrawCharacter (area.width - 1, y, borderChars.right);
-			}
-			DrawCharacter (area.TopLeft, borderChars.topLeft);
-			DrawCharacter (area.TopRight, borderChars.topRight);
-			DrawCharacter (area.BottomLeft, borderChars.bottomLeft);
-			DrawCharacter (area.BottomRight, borderChars.bottomRight);
-			CursorPosition = Position.Zero;
+        public static void DrawVerticalDivider(int xPos)
+        {
+            var c = _borderChars.Left;
+            for (int y = 0; y < _area.Height; y++)
+            {
+                DrawString(new Position(xPos, y), c.ToString());
+            }
+        }
 
-			CursorPosition = cachedAreaPos;
+        /// <summary>
+        /// Border drawing contracts the current area so that borders will not be overwritten by subsequent draw calls.
+        /// </summary>
+        public static void DrawAreaBorder()
+        {
+            var cachedAreaPos = CursorPosition;
 
-			ScaleAreaCentered (-1, -1);
-		}
+            // Horizontal
+            for (int x = 1; x < _area.Width - 1; x++)
+            {
+                DrawCharacter(x, 0, _borderChars.Top);
+                DrawCharacter(x, _area.Height - 1, _borderChars.Bottom);
+            }
 
-		static public void Fill (ConsoleColor color)
-		{
-			Console.BackgroundColor = color;
-			Clear ();
-			Console.ResetColor ();
-		}
+            // Vertical
+            for (int y = 1; y < _area.Height - 1; y++)
+            {
+                DrawCharacter(0, y, _borderChars.Left);
+                DrawCharacter(_area.Width - 1, y, _borderChars.Right);
+            }
 
-		static public void Clear ()
-		{
-			int left = Console.CursorLeft;
-			int top = Console.CursorTop;
-			var spaces = new string (' ', area.width);
-			for (int y = area.windowPosition.y; y < area.windowPosition.y + area.height; y++) {
-				Console.SetCursorPosition (area.windowPosition.x, y);
-				Console.Write (spaces);
-			}
-			Console.SetCursorPosition (left, top);
-		}
+            DrawCharacter(_area.TopLeft, _borderChars.TopLeft);
+            DrawCharacter(_area.TopRight, _borderChars.TopRight);
+            DrawCharacter(_area.BottomLeft, _borderChars.BottomLeft);
+            DrawCharacter(_area.BottomRight, _borderChars.BottomRight);
+            CursorPosition = Position.Zero;
+
+            CursorPosition = cachedAreaPos;
+
+            ScaleAreaCentered(-1, -1);
+        }
+
+        public static void Fill(ConsoleColor color)
+        {
+            Console.BackgroundColor = color;
+            Clear();
+            Console.ResetColor();
+        }
+
+        public static void Clear()
+        {
+            int left = Console.CursorLeft;
+            int top = Console.CursorTop;
+            var spaces = new string(' ', _area.Width);
+            for (int y = _area.WindowPosition.Y; y < _area.WindowPosition.Y + _area.Height; y++)
+            {
+                Console.SetCursorPosition(_area.WindowPosition.X, y);
+                Console.Write(spaces);
+            }
+
+            Console.SetCursorPosition(left, top);
+        }
 
 //		Position WindowClippedPositionInArea {
 //			get {
@@ -283,26 +296,26 @@ namespace ConsoleUI
 //			}
 //		}
 
-		static public bool IsWindowPositionInArea (Position p)
-		{
-			return IsLocalPositionInArea (WindowToAreaPosition (p));
-		}
+        public static bool IsWindowPositionInArea(Position p)
+        {
+            return IsLocalPositionInArea(WindowToAreaPosition(p));
+        }
 
-		static public bool IsLocalPositionInArea (Position p)
-		{
-			return p.x < area.width && p.x >= 0 && p.y < area.height && p.y >= 0;
-		}
+        public static bool IsLocalPositionInArea(Position p)
+        {
+            return p.X < _area.Width && p.X >= 0 && p.Y < _area.Height && p.Y >= 0;
+        }
 
-		static Position AreaToWindowPosition (Position p)
-		{
-			return new Position (p.x + area.windowPosition.x, p.y + area.windowPosition.y);
-		}
+        private static Position AreaToWindowPosition(Position p)
+        {
+            return new Position(p.X + _area.WindowPosition.X, p.Y + _area.WindowPosition.Y);
+        }
 
-		static Position WindowToAreaPosition (Position p)
-		{
-			return new Position (p.x - area.windowPosition.x, p.y - area.windowPosition.y);
-		}
-	}
+        private static Position WindowToAreaPosition(Position p)
+        {
+            return new Position(p.X - _area.WindowPosition.X, p.Y - _area.WindowPosition.Y);
+        }
+    }
 
 }
 

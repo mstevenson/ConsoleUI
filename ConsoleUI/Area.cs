@@ -1,33 +1,31 @@
-﻿using System;
-
-namespace ConsoleUI
+﻿namespace ConsoleUI
 {
-	public struct Area
-	{
-		public Position windowPosition; // top left corner in window
-		public int width;
-		public int height;
-		public Position cursorPosition;
+    public struct Area
+    {
+        public Position WindowPosition; // top left corner in window
+        public int Width;
+        public int Height;
+        public Position CursorPosition;
 
-		public Area (Position pos, int width, int height)
-		{
-			this.windowPosition = pos;
-			this.width = width;
-			this.height = height;
-			this.cursorPosition = Position.Zero;
-		}
+        public Area(Position pos, int width, int height)
+        {
+            WindowPosition = pos;
+            Width = width;
+            Height = height;
+            CursorPosition = Position.Zero;
+        }
 
-		public Position TopLeft { get { return new Position (0, 0); } }
+        public Position TopLeft => new Position(0, 0);
 
-		public Position TopRight { get { return new Position (width - 1, 0); } }
+        public Position TopRight => new Position(Width - 1, 0);
 
-		public Position TopCenter { get { return new Position(width / 2, 0); } }
+        public Position TopCenter => new Position(Width / 2, 0);
 
-		public Position BottomLeft { get { return new Position(0, height - 1); } }
+        public Position BottomLeft => new Position(0, Height - 1);
 
-		public Position BottomCenter { get { return new Position (width / 2, height - 1); } }
+        public Position BottomCenter => new Position(Width / 2, Height - 1);
 
-		public Position BottomRight { get { return new Position (width - 1, height - 1); } }
-	}
+        public Position BottomRight => new Position(Width - 1, Height - 1);
+    }
 }
 

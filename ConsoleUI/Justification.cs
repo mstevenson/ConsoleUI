@@ -1,11 +1,11 @@
-﻿using System;
-
+﻿
 namespace ConsoleUI
 {
-	public enum Justification {
-		Left,
-		Center,
-		Right
-	}
+    public enum Justification
+    {
+        Left,
+        Center,
+        Right
+    }
 }
 

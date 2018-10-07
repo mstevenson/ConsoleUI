@@ -1,27 +1,37 @@
-﻿using System;
-
-namespace ConsoleUI
+﻿namespace ConsoleUI
 {
-	public struct Position
-	{
-		public int x;
-		public int y;
+    public struct Position
+    {
+        public int X;
+        public int Y;
 
-		public Position (int x, int y)
-		{
-			this.x = x;
-			this.y = y;
-		}
+        public Position(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
 
-		public static Position Zero { get { return new Position (0, 0); } }
+        public static Position Zero => new Position(0, 0);
 
-		public Position GetDown (int distance = 1) { return new Position (x, y + distance); }
+        public Position GetDown(int distance = 1)
+        {
+            return new Position(X, Y + distance);
+        }
 
-		public Position GetUp (int distance = 1) { return new Position (x, y - distance); }
+        public Position GetUp(int distance = 1)
+        {
+            return new Position(X, Y - distance);
+        }
 
-		public Position GetLeft (int distance = 1) { return new Position (x - 1, y); }
+        public Position GetLeft(int distance = 1)
+        {
+            return new Position(X - 1, Y);
+        }
 
-		public Position GetRight (int distance = 1) { return new Position (x + 1, y); }
-	}
+        public Position GetRight(int distance = 1)
+        {
+            return new Position(X + 1, Y);
+        }
+    }
 }
 
